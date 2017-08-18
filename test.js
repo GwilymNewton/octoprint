@@ -9,7 +9,9 @@ var settings = {address:test_settings.address,
 var server = new OctoPrintServer(settings);
 
 server.api_version().then(function(version,error){
-
   console.log(version);
-  console.log(error);
+});
+
+server.getPrinterConnection().then(function(connection,error){
+  console.log(connection);
 });

@@ -36,9 +36,16 @@ class OctoPrintServer {
   }
 
   getPrinterConnection(){
-       return new Promise(function (resolve, reject) {
-
-       });
+    var self = this;
+    return new Promise(function (resolve, reject) {
+      var path = self.getPath("connection");
+      self.restGET(path).then(function (body, err) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
+    });
   }
 
     connectToPrinter(){
