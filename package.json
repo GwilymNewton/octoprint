@@ -1,0 +1,29 @@
+{
+  "name": "octoprint",
+  "version": "0.0.1",
+  "description": "npm package to interact with the octoprint REST API",
+  "main": "octoprint.js",
+  "scripts": {
+    "test": "node  test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GwilymNewton/octoprint.git"
+  },
+  "keywords": [
+    "3D",
+    "Printer",
+    "OcotoPrint",
+    "REST"
+  ],
+  "author": "Gwilym Newton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GwilymNewton/octoprint/issues"
+  },
+  "homepage": "https://github.com/GwilymNewton/octoprint#readme",
+  "dependencies": {
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
