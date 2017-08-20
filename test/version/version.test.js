@@ -18,6 +18,8 @@ tap.test('api_version', function (childTest) {
     }
     childTest.equal((typeof error), 'undefined');
     childTest.equal((typeof version), 'object');
+    childTest.ok(version.hasOwnProperty("api"));
+    childTest.ok(version.hasOwnProperty("server"));
     childTest.end();
   })
 })

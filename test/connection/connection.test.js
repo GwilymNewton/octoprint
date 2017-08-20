@@ -18,6 +18,8 @@ tap.test('Get Printer Connection', function (childTest) {
     }
     childTest.equal((typeof error), 'undefined');
     childTest.equal((typeof connection), 'object');
+    childTest.ok(connection.hasOwnProperty("current"));
+    childTest.ok(connection.hasOwnProperty("options"));
     childTest.end();
   })
 })
