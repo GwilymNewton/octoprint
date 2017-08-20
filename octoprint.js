@@ -103,6 +103,33 @@ class OctoPrintServer {
     });
   }
 
+    /**
+     * Retrieve information regarding the files currently available on the selected location
+     * @param   {string} folder_name [[Name of the folder to get files from]]
+     * @param   {boolean} recursive   [[If the query parameter recursive is provided and set to true, returns all files and folders.Otherwise by default only returns the files and folders in the root directory.]]]
+     * @returns {object} An object withinformation regarding all files currently available and regarding the disk space still available
+     */
+    getFilesFromFolder(folder_name,recursive) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      recursive += (typeof recursive == "undefined") ? false : true;
+
+      var path = self.getPath("files");
+
+      var qs = {
+        recursive: recursive
+      };
+
+      self.restGET(path, qs).then(function (body, err) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
+    });
+  }
+
   /*
   None public functions Below
   */
