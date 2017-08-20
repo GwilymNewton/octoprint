@@ -18,6 +18,8 @@ class OctoPrintServer {
 
   }
 
+  /*VERSION API */
+
   /**
    * Retrieve information regarding server and API version.
    * @returns {object} Returns a JSON object with two keys, api containing the API version, server containing the server version.
@@ -35,7 +37,13 @@ class OctoPrintServer {
     });
   }
 
-  getPrinterConnection(){
+  /*Connection API */
+
+  /**
+   * Retrieve the current connection settings, including information regarding the available baudrates and serial ports and the current connection state.
+   * @returns {object} An object with the available baudrates and serial ports and the current connection state.
+   */
+  getPrinterConnection() {
     var self = this;
     return new Promise(function (resolve, reject) {
       var path = self.getPath("connection");
@@ -48,24 +56,52 @@ class OctoPrintServer {
     });
   }
 
-    connectToPrinter(){
-       return new Promise(function (resolve, reject) {
+  connectToPrinter() {
+    return new Promise(function (resolve, reject) {
 
-       });
+    });
   }
 
-      disconnectFromPrinter(){
-       return new Promise(function (resolve, reject) {
+  disconnectFromPrinter() {
+    return new Promise(function (resolve, reject) {
 
-       });
-      }
-
-       fakeAckToPrinter(){
-       return new Promise(function (resolve, reject) {
-
-       });
+    });
   }
 
+  fakeAckToPrinter() {
+    return new Promise(function (resolve, reject) {
+
+    });
+  }
+
+  /*Files API */
+  /**
+   * Retrieve information regarding all files currently available and regarding the disk space still available locally in the system.
+
+
+   * @param   {boolean} recusive [[ If the query parameter recursive is provided and set to true, returns all files and folders.Otherwise by default only returns the files and folders in the root directory.]]
+   * @returns {object} An object withinformation regarding all files currently available and regarding the disk space still available
+   */
+  getAllFiles(recursive) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      recursive += (typeof recursive == "undefined") ? false : true;
+
+      var path = self.getPath("files");
+
+      var qs = {
+        recursive: recursive
+      };
+
+      self.restGET(path, qs).then(function (body, err) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
+    });
+  }
 
   /*
   None public functions Below
@@ -79,7 +115,7 @@ class OctoPrintServer {
     }
   }
 
-  restGET(path) {
+  restGET(path,qs) {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -89,6 +125,7 @@ class OctoPrintServer {
         headers: {
           'X-Api-Key': self.APIKey
         },
+        qs: qs,
         json: true // Automatically parses the JSON string in the response
       };
 
@@ -104,7 +141,7 @@ class OctoPrintServer {
     })
   }
 
-  restPOST(path,body) {
+  restPOST(path, body) {
     return new Promise(function (resolve, reject) {
 
       url = this.address + this.path;

@@ -2,6 +2,7 @@
   "latest": "0.1",
   "0.1": {
     "version":"/api/version",
-    "connection":"/api/connection"
+    "connection":"/api/connection",
+    "files":"/api/files"
   }
 }
