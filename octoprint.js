@@ -116,6 +116,7 @@ class OctoPrintServer {
       recursive += (typeof recursive == "undefined") ? false : true;
 
       var path = self.getPath("files");
+      path += "/"+folder_name;
 
       var qs = {
         recursive: recursive
