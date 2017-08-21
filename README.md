@@ -7,8 +7,8 @@ npm wrapper for the OcotoPrint  [REST API](http://docs.octoprint.org/en/master/a
 
 ##Connection
  - `getPrinterConnection()` - Retrieve the current connection settings, including information regarding the available baudrates and serial ports and the current connection state.version.
- - `connectToPrinter()` - **NOT YET IMPLIMENTED**
- -  `disconnectFromPrinter()` - **NOT YET IMPLIMENTED**
+ - `connectToPrinter()` - Instructs OctoPrint to connect to the printer 
+ -  `disconnectFromPrinter()` - Instructs OctoPrint to disconnect from the printer.
  - `fakeAckToPrinter()` - **NOT YET IMPLIMENTED**
 ##Files
  - `getAllFiles()` -  Retrieve information regarding all files currently available and regarding the disk space still available locally in the system.

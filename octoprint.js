@@ -80,9 +80,22 @@ class OctoPrintServer {
 
     });
   }
-
+  /**
+   * Instructs OctoPrint to disconnect from the printer.
+   * @returns {Promise} resolve(true) - No error, reject(err)
+   */
   disconnectFromPrinter() {
+    var self = this;
     return new Promise(function (resolve, reject) {
+      var settings = {}
+      settings.command = "disconnect";
+      var path = self.getPath("connection");
+      self.restPOST(path, settings).then(function (body, err) {
+          resolve(true);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
 
     });
   }
