@@ -75,6 +75,7 @@ class OctoPrintServer {
   }
 
   /*Files API */
+
   /**
    * Retrieve information regarding all files currently available and regarding the disk space still available locally in the system.
 
@@ -103,26 +104,176 @@ class OctoPrintServer {
     });
   }
 
-    /**
-     * Retrieve information regarding the files currently available on the selected location
-     * @param   {string} folder_name [[Name of the folder to get files from]]
-     * @param   {boolean} recursive   [[If the query parameter recursive is provided and set to true, returns all files and folders.Otherwise by default only returns the files and folders in the root directory.]]]
-     * @returns {object} An object withinformation regarding all files currently available and regarding the disk space still available
-     */
-    getFilesFromFolder(folder_name,recursive) {
+  /**
+   * Retrieve information regarding the files currently available on the selected location
+   * @param   {string} folder_name [[Name of the folder to get files from]]
+   * @param   {boolean} recursive   [[If the query parameter recursive is provided and set to true, returns all files and folders.Otherwise by default only returns the files and folders in the root directory.]]]
+   * @returns {object} An object withinformation regarding all files currently available and regarding the disk space still available
+   */
+  getFilesFromFolder(folder_name, recursive) {
     var self = this;
     return new Promise(function (resolve, reject) {
 
       recursive += (typeof recursive == "undefined") ? false : true;
 
       var path = self.getPath("files");
-      path += "/"+folder_name;
+      path += "/" + folder_name;
 
       var qs = {
         recursive: recursive
       };
 
       self.restGET(path, qs).then(function (body, err) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
+    });
+  }
+
+
+  sendFile() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  createFolder() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  fileDetails() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  folderDetails() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  selectFile() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  sliceFile() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  copyFile() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  moveFile() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+  deleteFile() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+
+
+  /*Jobs API */
+  startJob() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+    cancelJob() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+    restartJob() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+    startJob() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+    pauseJob() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+    resumeJob() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+    toggleJob() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      reject("Not yet implimented")
+    });
+  }
+
+    /**
+     * [[Retrieve information about the current job (if there is one).]]
+     * @returns {[[object]]} job information response
+     */
+    jobStatus() {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+            var path = self.getPath("job");
+      self.restGET(path).then(function (body, err) {
           resolve(body);
         })
         .catch(function (err) {
@@ -143,7 +294,7 @@ class OctoPrintServer {
     }
   }
 
-  restGET(path,qs) {
+  restGET(path, qs) {
     var self = this;
     return new Promise(function (resolve, reject) {
 
