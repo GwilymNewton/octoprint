@@ -56,8 +56,27 @@ class OctoPrintServer {
     });
   }
 
-  connectToPrinter() {
+  /**
+   * Instructs OctoPrint to connect to the printer
+   * @param   {[[object]]} settings      Settings for connecting to the printer
+   * @param {string} settings.port The port to connect to
+   * @param {int} settings.baudrate The baudrate to connect with
+   * @param {string} settings.printerProfile The id of the printer profile to use for the connection
+   * @param {boolean} settings.save Whether to save the supplied connection settings as the new preference
+   * @param {boolean} settings.autoconnect Whether to attempt to automatically connect to the printer on server startup
+   * @returns {Promise} resolve(true) - No error, reject(err)
+   */
+  connectToPrinter(settings) {
+    var self = this;
     return new Promise(function (resolve, reject) {
+      settings.command = "connect";
+      var path = self.getPath("connection");
+      self.restPOST(path, settings).then(function (body, err) {
+          resolve(true);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
 
     });
   }
@@ -216,7 +235,7 @@ class OctoPrintServer {
     });
   }
 
-    cancelJob() {
+  cancelJob() {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -224,7 +243,7 @@ class OctoPrintServer {
     });
   }
 
-    restartJob() {
+  restartJob() {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -232,7 +251,7 @@ class OctoPrintServer {
     });
   }
 
-    startJob() {
+  startJob() {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -240,7 +259,7 @@ class OctoPrintServer {
     });
   }
 
-    pauseJob() {
+  pauseJob() {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -248,7 +267,7 @@ class OctoPrintServer {
     });
   }
 
-    resumeJob() {
+  resumeJob() {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -256,7 +275,7 @@ class OctoPrintServer {
     });
   }
 
-    toggleJob() {
+  toggleJob() {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -264,15 +283,15 @@ class OctoPrintServer {
     });
   }
 
-    /**
-     * [[Retrieve information about the current job (if there is one).]]
-     * @returns {[[object]]} job information response
-     */
-    jobStatus() {
+  /**
+   * [[Retrieve information about the current job (if there is one).]]
+   * @returns {[[object]]} job information response
+   */
+  jobStatus() {
     var self = this;
     return new Promise(function (resolve, reject) {
 
-            var path = self.getPath("job");
+      var path = self.getPath("job");
       self.restGET(path).then(function (body, err) {
           resolve(body);
         })
@@ -321,14 +340,16 @@ class OctoPrintServer {
   }
 
   restPOST(path, body) {
+    var self = this;
     return new Promise(function (resolve, reject) {
 
-      url = this.address + this.path;
+      var url = self.address + path;
       var options = {
         url: url,
         headers: {
-          'X-Api-Key': this.APIKey
+          'X-Api-Key': self.APIKey
         },
+        body:body,
         json: true // Automatically parses the JSON string in the response
       };
 
