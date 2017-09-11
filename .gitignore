@@ -2,3 +2,4 @@
 /test_settings.json
 /coverage/
 /.nyc_output/
+/test_gcode.gcode

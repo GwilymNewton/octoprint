@@ -172,14 +172,52 @@ class OctoPrintServer {
       reject("Not yet implimented")
     });
   }
-
-  createFolder() {
+  /**
+   * [[Description]]
+   * @param   {string} path The path within the location to  create the folder in (without the future foldername - basically the parent folder). If unset will default to the root folder of the location.
+   * @param   {string} foldername The name of the folder to create
+   * @returns {object} Describes the new folder
+   */
+  createFolder(foldername,path) {
     var self = this;
     return new Promise(function (resolve, reject) {
+      var form = {};
+      if(path ){form.path = path;}
+      if(foldername ){form.foldername = foldername;}
+      var api_path = self.getPath("files")+"/local";
+      self.restPOSTform(api_path, form).then(function (body, err) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err);
+        });
 
-      reject("Not yet implimented")
     });
   }
+
+  /**
+   * [[Description]]
+   * @param   {string} path The path within the location to  delete the folder in (without the future foldername - basically the parent folder). i.e to deltete "/api/files/local/test_folder" send nothing, or "/api/files/local/test/test_folder" send "/test"
+   * @param   {string} foldername The name of the folder to delete
+   * @returns {boolean} True if folder is delete
+   */
+  deleteFolder(foldername,path) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+      path = (typeof path =="undefined" ) ? "" : path;
+      var api_path = self.getPath("files")+"/local"+path+"/"+foldername;
+      console.log("api_path",api_path);
+      self.restDELETE(api_path).then(function (body, err) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err);
+        });
+
+    });
+  }
+
+
 
   fileDetails() {
     var self = this;
@@ -332,6 +370,7 @@ class OctoPrintServer {
 
       var url = self.address + path;
       var options = {
+        method: 'GET',
         url: url,
         headers: {
           'X-Api-Key': self.APIKey
@@ -352,17 +391,72 @@ class OctoPrintServer {
     })
   }
 
+  restDELETE(path) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      var url = self.address + path;
+      var options = {
+        method: 'DELETE',
+        url: url,
+        headers: {
+          'X-Api-Key': self.APIKey
+        },
+        json: true // Automatically parses the JSON string in the response
+      };
+
+      request(options)
+        .then(function (body) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
+
+
+    })
+  }
+
+
   restPOST(path, body) {
     var self = this;
     return new Promise(function (resolve, reject) {
 
       var url = self.address + path;
       var options = {
+        method: 'POST',
         url: url,
         headers: {
           'X-Api-Key': self.APIKey
         },
         body:body,
+        json: true // Automatically parses the JSON string in the response
+      };
+
+      request(options)
+        .then(function (body) {
+          resolve(body);
+        })
+        .catch(function (err) {
+          reject(err)
+        });
+
+
+    })
+  }
+
+    restPOSTform(path, form) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+
+      var url = self.address + path;
+      var options = {
+        method: 'POST',
+        url: url,
+        headers: {
+          'X-Api-Key': self.APIKey
+        },
+        form:form,
         json: true // Automatically parses the JSON string in the response
       };
 

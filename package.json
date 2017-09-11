@@ -1,10 +1,10 @@
 {
   "name": "octoprint",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "npm package to interact with the octoprint REST API",
   "main": "octoprint.js",
   "scripts": {
-    "test": "tap test/* --cov"
+    "test": "tap test/* --cov --jobs=2"
   },
   "repository": {
     "type": "git",
