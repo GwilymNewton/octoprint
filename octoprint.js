@@ -1,4 +1,5 @@
 var request = require('request-promise');
+var fs = require('fs');
 var api = require('./API.json');
 
 class OctoPrintServer {
@@ -67,23 +68,23 @@ class OctoPrintServer {
    * @returns {Promise} resolve(true) - No error, reject(err)
    */
   connectToPrinter(settings) {
-    var self = this;
-    return new Promise(function (resolve, reject) {
-      settings.command = "connect";
-      var path = self.getPath("connection");
-      self.restPOST(path, settings).then(function (body, err) {
-          resolve(true);
-        })
-        .catch(function (err) {
-          reject(err)
-        });
+      var self = this;
+      return new Promise(function (resolve, reject) {
+        settings.command = "connect";
+        var path = self.getPath("connection");
+        self.restPOST(path, settings).then(function (body, err) {
+            resolve(true);
+          })
+          .catch(function (err) {
+            reject(err)
+          });
 
-    });
-  }
-  /**
-   * Instructs OctoPrint to disconnect from the printer.
-   * @returns {Promise} resolve(true) - No error, reject(err)
-   */
+      });
+    }
+    /**
+     * Instructs OctoPrint to disconnect from the printer.
+     * @returns {Promise} resolve(true) - No error, reject(err)
+     */
   disconnectFromPrinter() {
     var self = this;
     return new Promise(function (resolve, reject) {
@@ -165,26 +166,67 @@ class OctoPrintServer {
   }
 
 
-  sendFile() {
-    var self = this;
-    return new Promise(function (resolve, reject) {
-
-      reject("Not yet implimented")
-    });
-  }
   /**
    * [[Description]]
-   * @param   {string} path The path within the location to  create the folder in (without the future foldername - basically the parent folder). If unset will default to the root folder of the location.
-   * @param   {string} foldername The name of the folder to create
-   * @returns {object} Describes the new folder
+   * @param   {string} file     The file to upload, including a valid
+   * @param   {string} path     The path within the location to upload the file  in (without the future filename - basically the parent folder).
+   * @param   {boolean} select   Whether to select the file directly after upload (true) or not (false).
+   * @param   {boolean} print    Whether to start printing the file directly after upload (true) or not (false).  If set, select is implicitely true as well.
+   * @param   {object} userdata An optional object that if specified will be interpreted as JSON and then saved along with the file as metadata
+   * @returns {object} [[Description]]
    */
-  createFolder(foldername,path) {
+  sendFile(file, path, select, print, userdata) {
+      var self = this;
+      return new Promise(function (resolve, reject) {
+        var form = {};
+        if (file) {
+          if(fs.existsSync(file))
+            {form.file = fs.createReadStream(file);}else{
+              reject("No file at path")
+            }
+
+        } else {
+          reject("No File");
+        }
+        if (path) {
+          form.path = path;
+        }
+        if (select) {
+          form.select = select;
+        }
+        if (print) {
+          form.print = print;
+        }
+        if (userdata) {
+          form.userdata = JSON.stringify(userdata);
+        }
+        //console.log(form)
+        var api_path = self.getPath("files") + "/local";
+        self.restPOSTform(api_path, form).then(function (body, err) {
+            resolve(body);
+          })
+          .catch(function (err) {
+            reject(err);
+          });
+      });
+    }
+    /**
+     * [[Description]]
+     * @param   {string} path The path within the location to  create the folder in (without the future foldername - basically the parent folder). If unset will default to the root folder of the location.
+     * @param   {string} foldername The name of the folder to create
+     * @returns {object} Describes the new folder
+     */
+  createFolder(foldername, path) {
     var self = this;
     return new Promise(function (resolve, reject) {
       var form = {};
-      if(path ){form.path = path;}
-      if(foldername ){form.foldername = foldername;}
-      var api_path = self.getPath("files")+"/local";
+      if (path) {
+        form.path = path;
+      }
+      if (foldername) {
+        form.foldername = foldername;
+      }
+      var api_path = self.getPath("files") + "/local";
       self.restPOSTform(api_path, form).then(function (body, err) {
           resolve(body);
         })
@@ -201,12 +243,12 @@ class OctoPrintServer {
    * @param   {string} foldername The name of the folder to delete
    * @returns {boolean} True if folder is delete
    */
-  deleteFolder(foldername,path) {
+  deleteFolder(foldername, path) {
     var self = this;
     return new Promise(function (resolve, reject) {
-      path = (typeof path =="undefined" ) ? "" : path;
-      var api_path = self.getPath("files")+"/local"+path+"/"+foldername;
-      console.log("api_path",api_path);
+      path = (typeof path == "undefined") ? "" : path;
+      var api_path = self.getPath("files") + "/local" + path + "/" + foldername;
+      //console.log("api_path",api_path);
       self.restDELETE(api_path).then(function (body, err) {
           resolve(body);
         })
@@ -429,7 +471,7 @@ class OctoPrintServer {
         headers: {
           'X-Api-Key': self.APIKey
         },
-        body:body,
+        body: body,
         json: true // Automatically parses the JSON string in the response
       };
 
@@ -445,7 +487,7 @@ class OctoPrintServer {
     })
   }
 
-    restPOSTform(path, form) {
+  restPOSTform(path, form) {
     var self = this;
     return new Promise(function (resolve, reject) {
 
@@ -456,7 +498,7 @@ class OctoPrintServer {
         headers: {
           'X-Api-Key': self.APIKey
         },
-        form:form,
+        formData: form,
         json: true // Automatically parses the JSON string in the response
       };
 

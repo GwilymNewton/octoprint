@@ -13,8 +13,9 @@ npm wrapper for the OcotoPrint  [REST API](http://docs.octoprint.org/en/master/a
 ##Files
  - `getAllFiles()` -  Retrieve information regarding all files currently available and regarding the disk space still available locally in the system.
  - `getFilesFromFolder()` -  Retrieve information regarding the files currently available on the selected location.
- -   `sendFile()` - **NOT YET IMPLIMENTED**
- -  `createFolder()` - **NOT YET IMPLIMENTED**
+ -   `sendFile()` - Upload a file to the selected location, and select or print.
+ -  `createFolder()` - create a new empty folder on the file system
+ -  `deleteFolder()` - delete folder on the file system
  -  `fileDetails()` - **NOT YET IMPLIMENTED**
  -  `selectFile()` - **NOT YET IMPLIMENTED**
  - `sliceFile()` - **NOT YET IMPLIMENTED**
